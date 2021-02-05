@@ -1,0 +1,4 @@
+${PODS_ROOT}/Target Support Files/Pods-ArabamAssignment/Pods-ArabamAssignment-frameworks.sh
+${BUILT_PRODUCTS_DIR}/AYPopupPickerView/AYPopupPickerView.framework
+${BUILT_PRODUCTS_DIR}/ImageSlideshow/ImageSlideshow.framework
+${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework

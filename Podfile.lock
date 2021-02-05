@@ -1,0 +1,29 @@
+PODS:
+  - AYPopupPickerView (1.2)
+  - ImageSlideshow/Core (1.9.2)
+  - ImageSlideshow/SDWebImage (1.9.2):
+    - ImageSlideshow/Core
+    - SDWebImage (>= 3.7)
+  - SDWebImage (5.10.3):
+    - SDWebImage/Core (= 5.10.3)
+  - SDWebImage/Core (5.10.3)
+
+DEPENDENCIES:
+  - AYPopupPickerView
+  - ImageSlideshow/SDWebImage
+  - SDWebImage
+
+SPEC REPOS:
+  trunk:
+    - AYPopupPickerView
+    - ImageSlideshow
+    - SDWebImage
+
+SPEC CHECKSUMS:
+  AYPopupPickerView: 639e88c630c79f68e1dc34cf2c90f43ea2dbff46
+  ImageSlideshow: be305b54eaf2b2cfc7a7141c7c734605d44dc07d
+  SDWebImage: e378178472b735e84b007bfb55514c97948a0598
+
+PODFILE CHECKSUM: 6c30134d044a54aa0cd0db95ace4ca15a369bb68
+
+COCOAPODS: 1.10.0

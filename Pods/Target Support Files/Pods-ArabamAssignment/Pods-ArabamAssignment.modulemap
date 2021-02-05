@@ -1,0 +1,6 @@
+framework module Pods_ArabamAssignment {
+  umbrella header "Pods-ArabamAssignment-umbrella.h"
+
+  export *
+  module * { export * }
+}
