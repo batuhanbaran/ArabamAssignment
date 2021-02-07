@@ -13,7 +13,7 @@ class Service{
 
     func fetchData(sort: Int, sortDirection: Int,skip: Int,take: Int,comletionHandler: @escaping(Result<[CarModel],Error>) -> Void){
         
-        let url = URL(string: "http://sandbox.arabamd.com/api/v1/listing?&skip=\(skip)&take=\(take)")!
+        let url = URL(string: "http://sandbox.arabamd.com/api/v1/listing?&sort=\(sort)&sortDirection=\(sortDirection)&skip=\(skip)&take=\(take)")!
         
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             //minYear=2018&maxYear=2020

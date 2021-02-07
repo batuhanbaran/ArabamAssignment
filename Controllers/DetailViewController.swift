@@ -219,7 +219,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
-        let callAction = UIAlertAction(title: "Call", style: .default) { (action) in
+        let callAction = UIAlertAction(title: "📞  Call \(self.carDetailModel.userInfo.phone)", style: .default) { (action) in
 
             //calling someone 😬
         }

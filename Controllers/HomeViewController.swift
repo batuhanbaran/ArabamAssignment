@@ -113,7 +113,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
 
             if self.carModel.count <= self.sampleDataCountLimit && !HomeViewController.isFiltered{
                 
-                print("filtreisiz")
+          
 
                 Service().fetchData(sort: self.sort, sortDirection: self.sortDirection, skip: self.skip,take: self.take) { (result) in
 
@@ -137,8 +137,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
             
             if self.carModel.count <= self.sampleDataCountLimit && HomeViewController.isFiltered{
-                
-                print("filtreli")
+      
 
                 let minYear = UserDefaults.standard.string(forKey: "minYear")
                 let maxYear = UserDefaults.standard.string(forKey: "maxYear")
@@ -180,7 +179,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBAction func sortButton(_ sender: Any) {
         
         
-        let itemsTitle = ["Gelişmiş Sıralama","Fiyat - ucuzdan pahalıya", "Fiyat - pahalıdan ucuza", "İlan tarihi - yeniden eskiye", "Model yılı - yeniden eskiye"]
+        let itemsTitle = ["Fiyat - ucuzdan pahalıya", "Fiyat - pahalıdan ucuza", "İlan tarihi - yeniden eskiye", "Model yılı - yeniden eskiye"]
         
         let popupPickerView = AYPopupPickerView()
         
@@ -201,30 +200,26 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             case 0:
                 
-                self.sort = 1
+                self.sort = 0
                 self.sortDirection = 0
                 
             case 1:
                 
                 
                 self.sort = 0
-                self.sortDirection = 0
+                self.sortDirection = 1
                 
             case 2:
                 
-                self.sort = 0
+                self.sort = 1
                 self.sortDirection = 1
             
 
             case 3:
                 
-                self.sort = 1
-                self.sortDirection = 1
-                
-            case 4:
-                
                 self.sort = 2
                 self.sortDirection = 1
+                
                 
             default:
                 
@@ -234,18 +229,18 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             if !HomeViewController.isFiltered{
                 
                 Service().fetchData(sort: self.sort, sortDirection: self.sortDirection, skip: self.skip,take: self.take) { (results) in
-                    
                     switch results{
                     
                     case .success(let cars):
                         
+    
                         self.carModel.removeAll(keepingCapacity: false)
                         self.carModel.append(contentsOf: cars)
                         
                         DispatchQueue.main.async {
                             
                             self.tableView.reloadData()
-
+    
                         }
                         
                     case .failure(let error):
@@ -253,6 +248,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                         print(error.localizedDescription)
                     }
                 }
+
                 
             }else{
                 
@@ -274,6 +270,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                                 
                                 self.tableView.reloadData()
                                 self.filterLabel.text = "Filter (1)"
+                                self.tableView.scrollsToTop = true
                             }
                             
                         case .failure(let error):
@@ -287,7 +284,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             
         })
         
-        self.tableView.scrollsToTop = true
+        
 
     }
 
