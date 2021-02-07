@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D806B26325C2BAC5009CCB9F /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806B26225C2BAC5009CCB9F /* Car.swift */; };
 		D806B26625C2C8CA009CCB9F /* HomeViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806B26525C2C8CA009CCB9F /* HomeViewTableViewCell.swift */; };
+		D840ECFD25CEFCAF0063D24B /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840ECFC25CEFCAF0063D24B /* FilterViewController.swift */; };
 		D862374025C9D0CF00D1D331 /* ImagePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D862373F25C9D0CF00D1D331 /* ImagePageViewController.swift */; };
 		D8E199AD25C1E89E0074EE2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E199AC25C1E89E0074EE2F /* AppDelegate.swift */; };
 		D8E199B125C1E89E0074EE2F /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E199B025C1E89E0074EE2F /* HomeViewController.swift */; };
@@ -26,6 +27,7 @@
 		897253265EC63098BB1295DF /* Pods-ArabamAssignment.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ArabamAssignment.release.xcconfig"; path = "Target Support Files/Pods-ArabamAssignment/Pods-ArabamAssignment.release.xcconfig"; sourceTree = "<group>"; };
 		D806B26225C2BAC5009CCB9F /* Car.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
 		D806B26525C2C8CA009CCB9F /* HomeViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewTableViewCell.swift; sourceTree = "<group>"; };
+		D840ECFC25CEFCAF0063D24B /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		D862373F25C9D0CF00D1D331 /* ImagePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePageViewController.swift; sourceTree = "<group>"; };
 		D8B3038625C87CF900DA630A /* ImageSlideshow.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ImageSlideshow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E199A925C1E89E0074EE2F /* ArabamAssignment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArabamAssignment.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,6 +124,7 @@
 			children = (
 				D8E199B025C1E89E0074EE2F /* HomeViewController.swift */,
 				D8E199CC25C1F1E50074EE2F /* DetailViewController.swift */,
+				D840ECFC25CEFCAF0063D24B /* FilterViewController.swift */,
 				D862373F25C9D0CF00D1D331 /* ImagePageViewController.swift */,
 			);
 			path = Controllers;
@@ -261,6 +264,7 @@
 			files = (
 				D8E199B125C1E89E0074EE2F /* HomeViewController.swift in Sources */,
 				D8E199AD25C1E89E0074EE2F /* AppDelegate.swift in Sources */,
+				D840ECFD25CEFCAF0063D24B /* FilterViewController.swift in Sources */,
 				D806B26325C2BAC5009CCB9F /* Car.swift in Sources */,
 				D8E199CA25C1EE8B0074EE2F /* ApiService.swift in Sources */,
 				D8E199CD25C1F1E50074EE2F /* DetailViewController.swift in Sources */,

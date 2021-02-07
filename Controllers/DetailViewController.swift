@@ -14,7 +14,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     @IBOutlet var carTitle: UILabel!
     @IBOutlet var tableView: UITableView!
-    @IBOutlet var userInfo: UILabel!
+ 
     
     @IBOutlet var imageSlideshow: ImageSlideshow!
     var imageSources = [SDWebImageSource]()
@@ -27,18 +27,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         // Do any additional setup after loading the view.
         
-        
+
         imageSlideshow.contentScaleMode = .scaleAspectFill
         
         let tapImage = UITapGestureRecognizer(target: self, action: #selector(self.tapImage(_:)))
         imageSlideshow.addGestureRecognizer(tapImage)
-        
-        self.userInfo.isUserInteractionEnabled = true
-        let tapUser = UITapGestureRecognizer(target: self, action: #selector(self.tapUser(_:)))
-        userInfo.addGestureRecognizer(tapUser)
-        
-        
 
+        
         getCarByAdvertId(id: UserDefaults.standard.integer(forKey: "selectedId"))
         
 
@@ -64,8 +59,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     self.tableView.reloadData()
                     
                     self.carTitle.text = self.carDetailModel.title
-                    self.userInfo.text = "📞  " + self.carDetailModel.userInfo.phone + " - " + self.carDetailModel.userInfo.nameSurname
-                    
+
                     //handling photo urls
                     for photo in self.carDetailModel.photos{
 
@@ -100,6 +94,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if section == 1{
             
             return self.carDetailModel.properties.count
+        }
+        
+        if section == 2{
+            
+            return 2
         }
         
         return Int()
@@ -154,6 +153,30 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         }
         
+        if indexPath.section == 2{
+
+
+            switch indexPath.row {
+            
+            case 0:
+                
+                cell?.textLabel?.text = "Name&Surname"
+                cell?.detailTextLabel?.text = self.carDetailModel.userInfo.nameSurname
+                
+            case 1:
+                
+                cell?.textLabel?.text = "Phone"
+                cell?.detailTextLabel?.text = self.carDetailModel.userInfo.phone
+                
+
+
+            default: break
+                
+            }
+
+
+        }
+        
         return cell!
         
     }
@@ -161,7 +184,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     func numberOfSections(in tableView: UITableView) -> Int {
 
-        return 2
+        return 3
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -174,6 +197,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
             return "Properties"
         }
+        
+        if section == 2{
+
+            return "User Info"
+        }
 
         return ""
     }
@@ -183,9 +211,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         UserDefaults.standard.set(self.imageUrls, forKey: "imageUrls")
         self.performSegue(withIdentifier: "imagePage", sender: nil)
     }
-    
-    @objc func tapUser(_ sender: UITapGestureRecognizer? = nil) {
-        
+    @IBAction func callButton(_ sender: Any) {
         
         //When the action sheet opens, it gives an error about constraints. According to my research, this is a bug.
         //https://stackoverflow.com/questions/55372093/uialertcontrollers-actionsheet-gives-constraint-error-on-ios-12-2-12-3
@@ -207,6 +233,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         self.present(actionSheet, animated: true, completion: nil)
     }
+    
 }
 
 

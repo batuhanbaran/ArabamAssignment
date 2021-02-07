@@ -15,12 +15,15 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     var carModel = [CarModel]()
 
-    var takeCount = 10
-    var sampleDataCountLimit = 50
+    private var take = 10
+    private var skip = 0
+    private var sampleDataCountLimit = 100
     
-    var sort = 1
-    var sortDirection = 0
+    private var sort = 1
+    private var sortDirection = 0
 
+    @IBOutlet var filterLabel: UILabel!
+    static var isFiltered: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,9 +35,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         navigationController?.navigationBar.titleTextAttributes = textAttributes as [NSAttributedString.Key : Any]
         self.navigationItem.title = "2. El"
         
-        let rightBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "sortIcon"), style: .plain, target: self, action: #selector(sortButton))
-        self.navigationItem.rightBarButtonItem = rightBarButton
-        
         
         //tableView delegates programmatically
         tableView.delegate = self
@@ -45,14 +45,14 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             
         //MARK:- call fetchData func
   
-        Service().fetchData(sort: self.sort, sortDirection: self.sortDirection,count: self.takeCount) { (results) in
+        Service().fetchData(sort: self.sort, sortDirection: self.sortDirection, skip: self.skip,take: self.take) { (results) in
             
             switch results{
             
             case .success(let cars):
                 
                 self.carModel.append(contentsOf: cars)
-                
+
                 DispatchQueue.main.async {
                     
                     self.tableView.reloadData()
@@ -109,19 +109,19 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.size.height{
 
-            self.takeCount += 10
+            self.skip += 10
 
-            if self.takeCount <= self.sampleDataCountLimit{
+            if self.carModel.count <= self.sampleDataCountLimit && !HomeViewController.isFiltered{
+                
+                print("filtreisiz")
 
-                Service().fetchData(sort: self.sort, sortDirection: self.sortDirection,count: self.takeCount) { (result) in
+                Service().fetchData(sort: self.sort, sortDirection: self.sortDirection, skip: self.skip,take: self.take) { (result) in
 
                     switch result{
 
                     case .success(let cars):
 
-                        self.carModel.removeAll(keepingCapacity: false)
                         self.carModel.append(contentsOf: cars)
-                    
 
                         DispatchQueue.main.async {
 
@@ -135,6 +135,38 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     }
                 }
             }
+            
+            if self.carModel.count <= self.sampleDataCountLimit && HomeViewController.isFiltered{
+                
+                print("filtreli")
+
+                let minYear = UserDefaults.standard.string(forKey: "minYear")
+                let maxYear = UserDefaults.standard.string(forKey: "maxYear")
+                
+                if minYear != nil && maxYear != nil{
+                    
+                    Service().fetchDataWithFilter(minYear: minYear!, maxYear: maxYear!, sort: self.sort, sortDirection: self.sortDirection, skip: self.skip, take: self.take) { (result) in
+                        
+                        switch result{
+                        
+                        case .success(let cars):
+                            
+                            
+                            self.carModel.append(contentsOf: cars)
+                            
+                            DispatchQueue.main.async {
+                                
+                                self.tableView.reloadData()
+
+                            }
+                            
+                        case .failure(let error):
+                            
+                            print(error.localizedDescription)
+                        }
+                    }
+                }
+            }
 
         }
     }
@@ -145,11 +177,22 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         return 120
     }
     
-    @objc func sortButton(){
+    @IBAction func sortButton(_ sender: Any) {
+        
         
         let itemsTitle = ["Gelişmiş Sıralama","Fiyat - ucuzdan pahalıya", "Fiyat - pahalıdan ucuza", "İlan tarihi - yeniden eskiye", "Model yılı - yeniden eskiye"]
         
         let popupPickerView = AYPopupPickerView()
+        
+        
+        //some customization
+        
+        popupPickerView.headerView.backgroundColor = UIColor.white
+        popupPickerView.doneButton.setTitle("Seç", for: .normal)
+        popupPickerView.doneButton.setTitleColor(.systemRed, for: .normal)
+        popupPickerView.cancelButton.setTitle("Vazgeç", for: .normal)
+        popupPickerView.cancelButton.setTitleColor(.systemRed, for: .normal)
+        
         popupPickerView.display(itemTitles: itemsTitle, doneHandler: {
             
             let selectedIndex = popupPickerView.pickerView.selectedRow(inComponent: 0)
@@ -188,7 +231,109 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 break
             }
 
-            Service().fetchData(sort: self.sort, sortDirection: self.sortDirection,count: self.takeCount) { (results) in
+            if !HomeViewController.isFiltered{
+                
+                Service().fetchData(sort: self.sort, sortDirection: self.sortDirection, skip: self.skip,take: self.take) { (results) in
+                    
+                    switch results{
+                    
+                    case .success(let cars):
+                        
+                        self.carModel.removeAll(keepingCapacity: false)
+                        self.carModel.append(contentsOf: cars)
+                        
+                        DispatchQueue.main.async {
+                            
+                            self.tableView.reloadData()
+
+                        }
+                        
+                    case .failure(let error):
+                        
+                        print(error.localizedDescription)
+                    }
+                }
+                
+            }else{
+                
+                let minYear = UserDefaults.standard.string(forKey: "minYear")
+                let maxYear = UserDefaults.standard.string(forKey: "maxYear")
+                
+                if minYear != nil && maxYear != nil && HomeViewController.isFiltered{
+                    
+                    Service().fetchDataWithFilter(minYear: minYear!, maxYear: maxYear!, sort: self.sort, sortDirection: self.sortDirection, skip: self.skip, take: self.take) { (result) in
+                        
+                        switch result{
+                        
+                        case .success(let cars):
+                            
+                            self.carModel.removeAll(keepingCapacity: false)
+                            self.carModel.append(contentsOf: cars)
+                            
+                            DispatchQueue.main.async {
+                                
+                                self.tableView.reloadData()
+                                self.filterLabel.text = "Filter (1)"
+                            }
+                            
+                        case .failure(let error):
+                            
+                            print(error.localizedDescription)
+                        }
+                    }
+                    
+                }
+            }
+            
+        })
+        
+        self.tableView.scrollsToTop = true
+
+    }
+
+    @IBAction func filterButton(_ sender: Any) {
+        
+        self.performSegue(withIdentifier: "toFilterVC", sender: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        let minYear = UserDefaults.standard.string(forKey: "minYear")
+        let maxYear = UserDefaults.standard.string(forKey: "maxYear")
+        
+        if minYear != nil && maxYear != nil && HomeViewController.isFiltered{
+            
+            Service().fetchDataWithFilter(minYear: minYear!, maxYear: maxYear!, sort: self.sort, sortDirection: self.sortDirection, skip: self.skip, take: self.take) { (result) in
+                
+                switch result{
+                
+                case .success(let cars):
+                    
+                    self.carModel.removeAll(keepingCapacity: false)
+                    self.carModel.append(contentsOf: cars)
+                    
+                    DispatchQueue.main.async {
+                        
+                        self.tableView.reloadData()
+                        self.filterLabel.text = "Filter (1)"
+                    }
+                    
+                case .failure(let error):
+                    
+                    print(error.localizedDescription)
+                }
+            }
+            
+        }
+        if minYear == nil && maxYear == nil && !HomeViewController.isFiltered{
+            
+            //when filter is clear...
+            self.filterLabel.text = "Filter"
+            self.skip = 0
+            self.sort = 1
+            self.sortDirection = 0
+            
+            Service().fetchData(sort: self.sort, sortDirection: self.sortDirection, skip: self.skip,take: self.take) { (results) in
                 
                 switch results{
                 
@@ -196,7 +341,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     
                     self.carModel.removeAll(keepingCapacity: false)
                     self.carModel.append(contentsOf: cars)
-                    
+
                     DispatchQueue.main.async {
                         
                         self.tableView.reloadData()
@@ -209,17 +354,10 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             }
             
-        })
+            
+        }
         
-        //some customization
-        
-        popupPickerView.headerView.backgroundColor = UIColor.white
-        popupPickerView.doneButton.setTitle("Seç", for: .normal)
-        popupPickerView.doneButton.setTitleColor(.systemRed, for: .normal)
-        popupPickerView.cancelButton.setTitle("Vazgeç", for: .normal)
-        popupPickerView.cancelButton.setTitleColor(.systemRed, for: .normal)
 
     }
-
-
+    
 }
